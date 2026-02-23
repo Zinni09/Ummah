@@ -1,0 +1,222 @@
+@font-face {
+    font-family: 'Kenao';
+    src: url('fonts/Kenao.otf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+body{
+    margin: 0;   
+    overflow-x: hidden;
+    
+}
+
+
+:root { --primary-color: #A5A195; 
+        --secondary-color: #98B298;
+        --background-color: #dfddce; 
+        --text-color: #000000;
+        --accent-color: #4b694c; }
+
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    max-width: 1100px;
+    width: 60%;
+    height: 600px;
+    max-height: 65vh;
+    background: #fffdf8;
+    border-radius: 20px;
+    padding: 30px;
+    overflow: hidden;   /* Critical: prevents layout from breaking */
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    font-size: 18px;
+    background: #f0ede6;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.close-modal:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+
+
+.modal-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100%;
+    gap: 40px;
+}
+
+
+.modal-layout img {
+    width: 100%;
+    border-radius: 12px;
+}
+.modal-info {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 10px;
+}
+
+
+
+.modal-info h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.modal-info p {
+    margin-bottom: 15px;
+}
+
+.modal-section {
+    margin-bottom: 20px;
+}
+
+.color-pill {
+    display: inline-block;
+    padding: 8px 14px;
+    margin-right: 8px;
+    border-radius: 20px;
+    background: #ddd;
+    cursor: pointer;
+}
+
+.modal-images {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+}
+
+.modal-images img {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.img-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.85);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.img-nav.left {
+    left: -15px;
+}
+
+.img-nav.right {
+    right: -15px;
+}
+
+.img-nav:hover {
+    background: white;
+}
+#modalDesc {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-y: auto;
+    padding-right: 10px;
+    max-height: 180px; /* stops it from pushing the button down */
+}
+
+
+
+#modalQty {
+  width: 90px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--primary-color);
+  background: #f6f3ee;
+  margin: 10px 0 15px 0;
+  font-size: 14px;
+}
+
+#modalQty:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+
+#modalColors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+#modalColors span {
+  padding: 7px 16px;
+  border-radius: 20px;
+  background: #f0ede6;
+  border: 1px solid var(--primary-color);
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+#modalColors span:hover {
+  background: var(--secondary-color);
+  color: white;
+}
+
+#modalColors span.active {
+  background: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.place-order-btn {
+    margin-top: auto; /* pushes button up into proper visible space */
+    width: 100%;
+    padding: 14px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.place-order-btn:hover {
+    background: var(--secondary-color);
+    color: var(--text-color);
+}

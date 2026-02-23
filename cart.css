@@ -1,0 +1,133 @@
+:root { 
+  --primary-color: #A5A195; 
+  --secondary-color: #98B298;
+  --background-color: #dfddce; 
+  --text-color: #000000;
+  --accent-color: #4b694c; 
+}
+
+/* CART PANEL */
+.cart-panel {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 380px;
+  height: 95vh;
+  background: var(--background-color);
+  box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+  padding: 20px;
+  transition: 0.3s;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  color: var(--text-color);
+}
+
+.cart-panel.active { 
+  right: 0; 
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--accent-color);
+}
+
+/* ITEMS */
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 15px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding: 12px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+  font-size: 14px;
+}
+
+.cart-item strong {
+  font-weight: 600;
+  color: var(--accent-color);
+}
+
+.cart-remove {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.cart-remove:hover {
+  color: #c0392b;
+  transform: scale(1.1);
+}
+
+
+/* FOOTER */
+.cart-footer {
+  border-top: 1px solid var(--primary-color);
+  padding-top: 12px;
+}
+
+/* BUTTON */
+.place-order-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.place-order-btn:hover {
+  background: var(--secondary-color);
+  color: var(--text-color);
+}
+
+/* NAV CART ICON */
+.cart-icon {
+  font-size: 20px;
+  cursor: pointer;
+  position: relative;
+  color: var(--accent-color);
+}
+
+.cart-icon:hover {
+  color: var(--secondary-color);
+}
+
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: var(--accent-color);
+  color: white;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+
+.cart-panel h2 {
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.cart-footer h3 {
+  font-weight: 600;
+  color: var(--accent-color);
+}
+

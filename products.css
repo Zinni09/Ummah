@@ -1,0 +1,143 @@
+/* PRODUCT SECTION */
+.product-section {
+    padding: 80px 6vw;
+    background: var(--background-color);
+    min-height: 100vh;
+}
+
+#categoryTitle {
+    color: var(--accent-color);
+    font-size: 34px;
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+}
+
+
+/* GRID LAYOUT */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 40px;
+}
+
+/* CARD */
+.product-card {
+    background: #f6f3ee;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    transition: 0.4s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.product-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.12);
+
+}
+
+/* IMAGE */
+.product-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+}
+
+/* INFO AREA */
+.product-info {
+    padding: 22px;
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* NAME */
+.product-info h3 {
+    font-size: 20px;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+/* PRICE */
+.product-info p {
+    margin-left: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+/* DESCRIPTION FADE */
+.product-desc {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #6b6b6b;
+    position: relative;
+    overflow: hidden;
+    max-height: 55px;
+    margin-top: 6px;
+}
+
+
+/* Fade effect */
+.product-desc::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 35px;
+    background: linear-gradient(transparent, #f6f3ee);
+}
+
+
+
+
+#modalColors {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+#modalColors span {
+  padding: 6px 14px;
+  border: 1px solid #000;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#modalColors span.active {
+  background: #000;
+  color: #fff;
+}
+
+
+#imgPrev,
+#imgNext {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.9);
+    border: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    transition: 0.2s ease;
+}
+
+#imgPrev { left: -10px; }
+#imgNext { right: -10px; }
+
+#imgPrev:hover,
+#imgNext:hover {
+    background: var(--accent-color);
+    color: white;
+}

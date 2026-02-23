@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UMMAH ADMIN</title>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <link rel="stylesheet" href="admin.css">
+
+</head>
+<body>
+
+<h1>UMMAH ADMIN PANEL</h1>
+
+<!-- PRODUCT MANAGEMENT -->
+<div class="box">
+<h2>PRODUCT MANAGER</h2>
+
+<input id="p_name" placeholder="Name">
+<input id="p_price" placeholder="Price">
+
+<select id="p_category">
+  <option value="">Select category</option>
+  <option value="ummah">UMMAH</option>
+  <option value="ramadhaan">RAMADHAAN</option>
+  <option value="eid">EID</option>
+  <option value="kids">KIDS</option>
+  <option value="toys">TOYS</option>
+  <option value="gifts">GIFTS</option>
+</select>
+
+<textarea id="p_desc" placeholder="Description"></textarea>
+<input id="p_colors" placeholder="Colors (comma separated)">
+<input id="p_image" placeholder="Main image URL">
+<input id="p_images" placeholder="Extra images URLs (comma separated)">
+
+<button onclick="saveProduct()">Save Product</button>
+
+<h3>Existing Products</h3>
+<div id="productList"></div>
+</div>
+
+<!-- ORDER MANAGEMENT -->
+<div class="box">
+<h2>ORDER MANAGER</h2>
+
+<input id="o_name" placeholder="Customer Name">
+<input id="o_address" placeholder="Customer Address">
+
+<select id="o_status">
+  <option>Pending Payment</option>
+  <option>Paid</option>
+  <option>Packed</option>
+  <option>Out for Delivery</option>
+  <option>Delivered</option>
+  <option>Cancelled</option>
+</select>
+
+<button onclick="createOrder()">Create Order</button>
+
+<hr>
+
+<h3>Add Items To Current Order</h3>
+
+<select id="o_product"></select>
+<input id="o_color" placeholder="Color">
+<input id="o_qty" type="number" value="1">
+<input id="o_price" placeholder="Price">
+
+<button onclick="addItem()">Add Item</button>
+
+<h3>Orders</h3>
+<div id="orderList"></div>
+</div>
+
+<script>
+const supabaseClient = supabase.createClient(
+  "https://recjhexllyzmdmcbgugh.supabase.co",
+   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlY2poZXhsbHl6bWRtY2JndWdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NDI5ODgsImV4cCI6MjA4NDMxODk4OH0.oxU6dAMmv30vahwrK5TQ409O1zna361oOSqPwNsFaaM"
+
+);
+
+let editingProductId = null;
+let currentOrderId = null;
+
+/* ---------------- PRODUCTS ---------------- */
+
+async function loadProducts(){
+  const {data, error} = await supabaseClient.from("products").select("*");
+  if(error){ alert(error.message); return; }
+
+  productList.innerHTML="";
+  o_product.innerHTML="";
+
+  data.forEach(p=>{
+    productList.innerHTML+=`
+      <div class="product-item">
+        ${p.name} - R${p.price}
+        <button onclick='editProduct(${JSON.stringify(p)})'>Edit</button>
+        <button onclick='deleteProduct(${p.id})'>Delete</button>
+      </div>
+    `;
+    o_product.innerHTML+=`<option value="${p.id}">${p.name}</option>`;
+  });
+}
+loadProducts();
+
+async function saveProduct(){
+  const product={
+    name:p_name.value,
+    price:parseFloat(p_price.value),
+    category:p_category.value,
+    description:p_desc.value,
+    colors:p_colors.value.split(",").map(c=>c.trim()),
+    image_url:p_image.value,
+    images:p_images.value.split(",").map(i=>i.trim())
+  };
+
+  if(editingProductId){
+    await supabaseClient.from("products")
+      .update(product).eq("id",editingProductId);
+  } else {
+    await supabaseClient.from("products").insert(product);
+  }
+
+  editingProductId=null;
+  clearProductForm();
+  loadProducts();
+}
+
+function editProduct(p){
+  editingProductId=p.id;
+  p_name.value=p.name;
+  p_price.value=p.price;
+  p_category.value=p.category;
+  p_desc.value=p.description;
+  p_colors.value=p.colors.join(",");
+  p_image.value=p.image_url;
+  p_images.value=p.images.join(",");
+}
+
+async function deleteProduct(id){
+  if(confirm("Delete product?")){
+    await supabaseClient.from("products").delete().eq("id",id);
+    loadProducts();
+  }
+}
+
+function clearProductForm(){
+  p_name.value="";
+  p_price.value="";
+  p_category.value="";
+  p_desc.value="";
+  p_colors.value="";
+  p_image.value="";
+  p_images.value="";
+}
+
+/* ---------------- ORDERS ---------------- */
+
+async function createOrder(){
+  const {data, error} = await supabaseClient
+    .from("orders")
+    .insert({
+      customer:o_name.value,
+      address:o_address.value,
+      status:o_status.value
+    })
+    .select()
+    .single();
+
+  if(error){ alert(error.message); return; }
+
+  currentOrderId = data.id;
+  alert("Order created. Now add items.");
+  loadOrders();
+}
+
+async function addItem(){
+  if(!currentOrderId){
+    alert("Create an order first");
+    return;
+  }
+
+  await supabaseClient.from("order_items").insert({
+    order_id: currentOrderId,
+    product_id: o_product.value,
+    qty: parseInt(o_qty.value),
+    color: o_color.value,
+    price: parseFloat(o_price.value)
+  });
+
+  alert("Item added");
+  loadOrders();
+}
+
+/* -------- ORDER STATUS SYSTEM -------- */
+
+function renderStatusOptions(current){
+  const statuses = [
+    "Pending Payment",
+    "Paid",
+    "Packed",
+    "Out for Delivery",
+    "Delivered",
+    "Cancelled"
+  ];
+
+  return statuses.map(s =>
+    `<option ${s===current?"selected":""}>${s}</option>`
+  ).join("");
+}
+
+async function updateOrderStatus(orderId, newStatus){
+  const {error} = await supabaseClient
+    .from("orders")
+    .update({ status: newStatus })
+    .eq("id", orderId);
+
+  if(error){
+    alert(error.message);
+  } else {
+    loadOrders();
+  }
+}
+
+async function loadOrders(){
+  const {data, error} = await supabaseClient
+    .from("orders")
+    .select(`
+      id,
+      customer,
+      status,
+      order_items (
+        qty,
+        color,
+        price,
+        products ( name )
+      )
+    `)
+    .order("created_at", { ascending: false });
+
+  if(error){ alert(error.message); return; }
+
+  orderList.innerHTML="";
+
+  data.forEach(o=>{
+    let itemsHtml = "";
+    let total = 0;
+
+    o.order_items.forEach(i=>{
+      const lineTotal = i.price * i.qty;
+      total += lineTotal;
+      itemsHtml += `- ${i.products.name} (${i.color||"N/A"}) x${i.qty} @ R${lineTotal}<br>`;
+    });
+
+    orderList.innerHTML += `
+      <div class="order-item" data-status="${o.status}">
+        <strong>${o.customer}</strong><br>
+
+        Status:
+        <select onchange="updateOrderStatus('${o.id}', this.value)">
+          ${renderStatusOptions(o.status)}
+        </select>
+
+        <br><br>
+        ${itemsHtml}
+        <strong>Total: R ${total}</strong>
+      </div>
+    `;
+  });
+}
+loadOrders();
+</script>
+</body>
+</html>

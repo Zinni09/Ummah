@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UMMAH</title>
+
+<link rel="stylesheet" href="Landing.css">
+<link rel="stylesheet" href="products.css">
+<link rel="stylesheet" href="description.css">
+<link rel="stylesheet" href="cart.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+
+<body>
+
+<nav class="navbar">
+  <section class="nav-container">
+    <a href="#" class="nav-logo">UMMAH</a>
+
+    <section class="nav-links">
+      <ul>
+        <li><a href="#" data-category="ummah">UMMAH</a></li>
+        <li><a href="#" data-category="ramadhaan">RAMADHAAN</a></li>
+        <li><a href="#" data-category="eid">EID</a></li>
+        <li><a href="#" data-category="kids">KIDS</a></li>
+        <li><a href="#" data-category="toys">TOYS</a></li>
+        <li><a href="#" data-category="gifts">GIFTS</a></li>
+        <li>
+          <span class="cart-icon" onclick="toggleCart()">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="cart-count" id="cartCount">0</span>
+          </span>
+        </li>
+      </ul>
+    </section>
+  </section>
+</nav>
+
+<section class="hero-slider" id="hero">
+  <div class="slider">
+    <img src="https://recjhexllyzmdmcbgugh.supabase.co/storage/v1/object/public/hero-slides/slide-1.png">
+    <img src="https://recjhexllyzmdmcbgugh.supabase.co/storage/v1/object/public/hero-slides/slide-2.png">
+    <img src="https://recjhexllyzmdmcbgugh.supabase.co/storage/v1/object/public/hero-slides/slide-3.png">
+  </div>
+</section>
+
+<section class="hero-btns" id="heroBtns">
+  <h1>UMMAH COLLECTION</h1>
+  <a href="#">SHOP NOW</a>
+</section>
+
+<section id="product-section" class="product-section hidden">
+  <h1 id="categoryTitle"></h1>
+  <div id="productGrid" class="product-grid"></div>
+</section>
+
+<!-- PRODUCT MODAL -->
+<div id="productModal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+
+    <div class="modal-layout">
+      <div class="modal-images">
+        <button id="imgPrev">&#10094;</button>
+        <img id="modalMainImage">
+        <button id="imgNext">&#10095;</button>
+      </div>
+
+      <div class="modal-info">
+        <h2 id="modalName"></h2>
+        <p id="modalPrice"></p>
+        <div id="modalColors"></div>
+
+        Quantity:
+        <input type="number" id="modalQty" value="1" min="1">
+
+        <p id="modalDesc"></p>
+
+        <button onclick="addToCart()" class="place-order-btn">
+          Add To Cart
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART PANEL -->
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h2>Your Cart</h2>
+    <span onclick="toggleCart()">&times;</span>
+  </div>
+
+  <div class="cart-items" id="cartItems"></div>
+
+  <div class="cart-footer">
+    <p>Delivery: R <span id="deliveryFee">90</span></p>
+    <h3>Total: R <span id="cartTotal">0</span></h3>
+    <button class="place-order-btn" onclick="checkoutWhatsApp()">
+      Place order Via Whatsapp
+    </button>
+  </div>
+</div>
+
+
+<!-- FOOTER  -->
+
+<footer class="footer">
+     <section class="footer-brand"> 
+        <h1>UMMAH</h1>
+<p>
+  <h5 style="display: inline;">UMMAH</h5> is a curated Islamic gift and toy brand that blends faith, creativity, and quality.
+  <br>It offers engaging, purposeful products that inspire Islamic values while bringing joy to children and meaningful gifting options for families.
+</p>
+     </section>
+      <section class="footer-links">
+         <h2>QUICK LINKS</h2> 
+         <ul> 
+            <li><a href="#">Ummah Collection</a></li> 
+            <li><a href = "howto.html"></a></li>             
+             </ul>
+             </section> 
+             <section class="footer-contact">
+                 <h2>CONTACT</h2> 
+                 <ul>
+                     <li><a href="https://www.instagram.com/ctrl_crafts?igsh=MXhoMXpkeHdrNGF1ag=="><i class="fa-brands fa-instagram"></i> ctrl_crafts</a></li>
+                      <li><a href="#"><i class="fa-brands fa-whatsapp"></i> WhatsApp 064-654-4559</a></li> 
+                      <!-- <li><a href="mailto:hello@ctrlapparel.com"><i class="fa-solid fa-envelope"></i> hello@ctrlapparel.com</a></li>  -->
+                    </ul>
+                 </section> 
+                 <section class="footer-bottom"> 
+                    <p>© 2025 UMMAH . All rights reserved.</p> </section> 
+                </footer>
+
+
+
+<script>
+const supabaseClient = supabase.createClient(
+  "https://recjhexllyzmdmcbgugh.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlY2poZXhsbHl6bWRtY2JndWdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NDI5ODgsImV4cCI6MjA4NDMxODk4OH0.oxU6dAMmv30vahwrK5TQ409O1zna361oOSqPwNsFaaM"
+
+);
+
+const hero = document.getElementById("hero");
+const heroBtns = document.getElementById("heroBtns");
+const productSection = document.getElementById("product-section");
+const productGrid = document.getElementById("productGrid");
+const categoryTitle = document.getElementById("categoryTitle");
+const modal = document.getElementById("productModal");
+
+let currentProduct=null;
+let currentImages=[];
+let currentIndex=0;
+let selectedColor="";
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+const DELIVERY_FEE=90;
+
+/* CART */
+function toggleCart(){
+  cartPanel.classList.toggle("active");
+  renderCart();
+}
+
+function updateCartCount(){
+  cartCount.innerText=cart.reduce((s,i)=>s+i.qty,0);
+}
+
+function addToCart(){
+  const qty=parseInt(modalQty.value);
+
+  const item={
+    id:currentProduct.id,
+    name:currentProduct.name,
+    price:currentProduct.price,
+    color:selectedColor,
+    qty
+  };
+
+  const existing=cart.find(i=>i.id===item.id && i.color===item.color);
+  if(existing) existing.qty+=qty;
+  else cart.push(item);
+
+  localStorage.setItem("cart",JSON.stringify(cart));
+  updateCartCount();
+  alert("Added to cart");
+}
+
+function removeFromCart(index){
+  cart.splice(index,1);
+  localStorage.setItem("cart",JSON.stringify(cart));
+  updateCartCount();
+  renderCart();
+}
+
+function renderCart(){
+  cartItems.innerHTML="";
+  let total=0;
+
+  cart.forEach((i,idx)=>{
+    total+=i.price*i.qty;
+    cartItems.innerHTML+=`
+      <div class="cart-item">
+        <div>
+          <strong>${i.name}</strong><br>
+          ${i.color||""} x ${i.qty}
+        </div>
+        <div>
+          R ${i.price*i.qty}
+         <button class="cart-remove" onclick="removeFromCart(${idx})">
+  <i class="fa-solid fa-trash"></i>
+</button>
+
+        </div>
+      </div>
+    `;
+  });
+
+  total+=DELIVERY_FEE;
+  cartTotal.innerText=total;
+}
+
+updateCartCount();
+
+/* WHATSAPP CHECKOUT */
+function checkoutWhatsApp(){
+  if(cart.length===0){
+    alert("Cart is empty");
+    return;
+  }
+
+  let msg="*NEW ORDER*%0A%0A";
+
+  cart.forEach((i,n)=>{
+    msg+=`${n+1}. ${i.name}%0A`;
+    msg+=`Color: ${i.color||"N/A"}%0A`;
+    msg+=`Qty: ${i.qty}%0A`;
+    msg+=`Price: R${i.price*i.qty}%0A%0A`;
+  });
+
+  const subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const total=subtotal+DELIVERY_FEE;
+
+  msg+=`Subtotal: R${subtotal}%0A`;
+  msg+=`Delivery: R${DELIVERY_FEE}%0A`;
+  msg+=`*TOTAL: R${total}*%0A%0A`;
+  msg+=`Please confirm my order.`;
+
+  window.open(`https://wa.me/27648699011?text=${msg}`,"_blank");
+}
+
+/* PRODUCTS */
+async function loadCategory(category){
+  const {data}=await supabaseClient
+    .from("products")
+    .select("*")
+    .eq("category",category);
+
+  hero.style.display="none";
+  heroBtns.style.display="none";
+  productSection.classList.remove("hidden");
+  categoryTitle.innerText=category.toUpperCase();
+  productGrid.innerHTML="";
+
+data.forEach(p=>{
+  productGrid.innerHTML+=`
+    <div class="product-card" onclick='openProduct(${JSON.stringify(p)})'>
+      <img src="${p.image_url}">
+      <div class="product-info">
+        <h3>${p.name}</h3>
+        <p>R ${p.price}</p>
+        <div class="product-desc">
+          ${p.description || ""}
+        </div>
+      </div>
+    </div>
+  `;
+});
+
+}
+
+function openProduct(p){
+  currentProduct=p;
+  modal.classList.remove("hidden");
+
+  modalName.innerText=p.name;
+  modalPrice.innerText="R "+p.price;
+  modalDesc.innerText=p.description||"";
+  modalQty.value=1;
+
+  currentImages=p.images||[p.image_url];
+  currentIndex=0;
+  modalMainImage.src=currentImages[0];
+
+  modalColors.innerHTML="";
+  if(p.colors){
+    p.colors.forEach(c=>{
+      const span=document.createElement("span");
+      span.innerText=c;
+      span.onclick=()=>{
+        document.querySelectorAll("#modalColors span")
+          .forEach(s=>s.classList.remove("active"));
+        span.classList.add("active");
+        selectedColor=c;
+      }
+      modalColors.appendChild(span);
+    });
+  }
+}
+
+imgNext.onclick=()=>{currentIndex=(currentIndex+1)%currentImages.length;modalMainImage.src=currentImages[currentIndex];}
+imgPrev.onclick=()=>{currentIndex=(currentIndex-1+currentImages.length)%currentImages.length;modalMainImage.src=currentImages[currentIndex];}
+
+
+
+document.querySelector(".close-modal").onclick=()=>modal.classList.add("hidden");
+
+document.querySelectorAll(".nav-links a").forEach(link=>{
+  link.onclick=e=>{
+    e.preventDefault();
+    loadCategory(link.dataset.category);
+  };
+});
+
+document.querySelector("#heroBtns a").onclick=e=>{
+  e.preventDefault();
+  loadCategory("ummah");
+};
+
+document.querySelector(".nav-logo").onclick=()=>{
+  hero.style.display="block";
+  heroBtns.style.display="block";
+  productSection.classList.add("hidden");
+};
+</script>
+</body>
+</html>

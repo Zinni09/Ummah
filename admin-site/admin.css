@@ -1,0 +1,166 @@
+:root {
+  --primary-color: #A5A195;
+  --secondary-color: #98B298;
+  --background-color: #dfddce;
+  --text-color: #000000;
+  --accent-color: #4b694c;
+  --card-bg: #f5f4ee;
+  --border-color: #c9c6b8;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 40px;
+  background: var(--background-color);
+  color: var(--text-color);
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: var(--accent-color);
+  letter-spacing: 1px;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+h3 {
+  margin: 20px 0 10px;
+  font-weight: 500;
+}
+
+.box {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 24px 28px;
+  margin-bottom: 40px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 10px 14px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: white;
+  font-size: 14px;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+button {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #3f5b40;
+}
+
+.product-item,
+.order-item {
+  background: white;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 10px 0;
+  border: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-item button {
+  margin-left: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.order-item {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* STATUS COLORS */
+
+.order-item[data-status="Pending Payment"] {
+  border-left: 6px solid #e0a800;
+}
+
+.order-item[data-status="Paid"] {
+  border-left: 6px solid #3498db;
+}
+
+.order-item[data-status="Packed"] {
+  border-left: 6px solid #8e44ad;
+}
+
+.order-item[data-status="Out for Delivery"] {
+  border-left: 6px solid #f1c40f;
+}
+
+.order-item[data-status="Delivered"] {
+  border-left: 6px solid #27ae60;
+}
+
+.order-item[data-status="Cancelled"] {
+  border-left: 6px solid #c0392b;
+}
+
+.order-item select {
+  width: auto;
+  padding: 6px 10px;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 25px 0;
+}
+
+/* DASHBOARD GRID */
+
+@media (min-width: 900px) {
+  body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  h1 {
+    grid-column: 1 / -1;
+  }
+}
